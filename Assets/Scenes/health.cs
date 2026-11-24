@@ -9,6 +9,10 @@ public class Health : MonoBehaviour
     [Header("Heart Rotation")]
     [SerializeField] float rotationSpeed = 90f;
 
+    [Header("Damage Particle")]
+    [SerializeField] GameObject damageParticle;
+    [SerializeField] Vector3 particleOffset = new Vector3(0f, 1f, 0f);
+
     public bool shielded;
 
     int current;
@@ -46,6 +50,31 @@ public class Health : MonoBehaviour
         invulnerableUntil = Time.time + iFrames;
         current = Mathf.Max(0, current - amount);
 
+        // DAMAGE PARTICLE
+        Debug.Log("DAMAGE PARTICLE TRIGGERED");
+
+        if (damageParticle != null)
+        {
+            GameObject effect = Instantiate(
+                damageParticle,
+                transform.position + particleOffset,
+                Quaternion.identity
+            );
+
+            Debug.Log("Damage particle created successfully!");
+
+            Destroy(effect, 3f);
+        }
+        else
+        {
+            Debug.LogError("Damage Particle is NOT assigned in Health Inspector!");
+        }
+
+        // DAMAGE SOUND
+        if (SfxPlayer.Instance != null)
+            SfxPlayer.Instance.PlayDamageSound();
+
+        // UPDATE UI
         if (GameManager.Instance != null)
         {
             GameManager.Instance.UpdateUI();

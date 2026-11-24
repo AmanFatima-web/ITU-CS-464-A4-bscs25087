@@ -11,8 +11,14 @@ public class Guard : MonoBehaviour
     [Header("Damage Settings")]
     [SerializeField] int damage = 1;
 
+    [Header("3D Guard Sound")]
+    [SerializeField] float soundVolume = 1f;
+    [SerializeField] float minDistance = 2f;
+    [SerializeField] float maxDistance = 12f;
+
     Transform player;
     Rigidbody rb;
+    AudioSource guardAudio;
 
     Material blackMaterial;
     Material redMaterial;
@@ -34,6 +40,32 @@ public class Guard : MonoBehaviour
         }
 
         CreateCharacter();
+        SetupGuardSound();
+    }
+
+    void SetupGuardSound()
+    {
+        if (SfxPlayer.Instance == null)
+            return;
+
+        AudioClip clip = SfxPlayer.Instance.GetGuardSound();
+
+        if (clip == null)
+            return;
+
+        guardAudio = gameObject.AddComponent<AudioSource>();
+
+        guardAudio.clip = clip;
+        guardAudio.playOnAwake = false;
+        guardAudio.loop = true;
+        guardAudio.volume = soundVolume;
+
+        guardAudio.spatialBlend = 1f;
+        guardAudio.rolloffMode = AudioRolloffMode.Logarithmic;
+        guardAudio.minDistance = minDistance;
+        guardAudio.maxDistance = maxDistance;
+
+        guardAudio.Play();
     }
 
     void CreateCharacter()
@@ -50,7 +82,6 @@ public class Guard : MonoBehaviour
             blackMaterial = CreateMaterial(Color.black);
         }
 
-        // Bright glowing red eyes
         redMaterial = CreateMaterial(Color.red);
 
         if (redMaterial.HasProperty("_EmissionColor"))
@@ -62,7 +93,6 @@ public class Guard : MonoBehaviour
             );
         }
 
-        // HEAD
         CreatePart(
             PrimitiveType.Sphere,
             "Head",
@@ -71,7 +101,6 @@ public class Guard : MonoBehaviour
             blackMaterial
         );
 
-        // BIG LEFT EYE
         CreatePart(
             PrimitiveType.Sphere,
             "Left Eye",
@@ -80,7 +109,6 @@ public class Guard : MonoBehaviour
             redMaterial
         );
 
-        // BIG RIGHT EYE
         CreatePart(
             PrimitiveType.Sphere,
             "Right Eye",
@@ -89,7 +117,6 @@ public class Guard : MonoBehaviour
             redMaterial
         );
 
-        // BIGGER LEFT ARM
         CreatePart(
             PrimitiveType.Capsule,
             "Left Arm",
@@ -99,7 +126,6 @@ public class Guard : MonoBehaviour
             new Vector3(0f, 0f, 90f)
         );
 
-        // BIGGER RIGHT ARM
         CreatePart(
             PrimitiveType.Capsule,
             "Right Arm",
@@ -109,7 +135,6 @@ public class Guard : MonoBehaviour
             new Vector3(0f, 0f, -90f)
         );
 
-        // LEFT FOOT
         CreatePart(
             PrimitiveType.Cube,
             "Left Foot",
@@ -118,7 +143,6 @@ public class Guard : MonoBehaviour
             blackMaterial
         );
 
-        // RIGHT FOOT
         CreatePart(
             PrimitiveType.Cube,
             "Right Foot",

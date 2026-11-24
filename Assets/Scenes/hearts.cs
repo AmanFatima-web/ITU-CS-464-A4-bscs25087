@@ -8,21 +8,17 @@ public class Heart : MonoBehaviour
 
     void Start()
     {
-        // Get original pink material
         MeshRenderer original = GetComponent<MeshRenderer>();
 
         Material pinkMaterial = original != null
             ? original.sharedMaterial
             : null;
 
-        // Hide original ball
         if (original != null)
             original.enabled = false;
 
-        // Create proper heart shape
         CreateHeart(pinkMaterial);
 
-        // Setup pickup trigger
         Collider pickupCollider = GetComponent<Collider>();
         pickupCollider.isTrigger = true;
 
@@ -31,7 +27,6 @@ public class Heart : MonoBehaviour
         if (sphere != null)
             sphere.radius = 0.85f;
 
-        // Add Rigidbody for trigger detection
         Rigidbody rb = GetComponent<Rigidbody>();
 
         if (rb == null)
@@ -57,7 +52,6 @@ public class Heart : MonoBehaviour
 
         Vector3[] vertices = new Vector3[points * 2 + 2];
 
-        // Create front and back heart outline
         for (int i = 0; i < points; i++)
         {
             float t = 2f * Mathf.PI * i / points;
@@ -73,13 +67,8 @@ public class Heart : MonoBehaviour
             float heartX = x * 0.045f;
             float heartY = (y + 2.5f) * 0.045f;
 
-            vertices[i] = new Vector3(
-                heartX, heartY, 0.08f
-            );
-
-            vertices[points + i] = new Vector3(
-                heartX, heartY, -0.08f
-            );
+            vertices[i] = new Vector3(heartX, heartY, 0.08f);
+            vertices[points + i] = new Vector3(heartX, heartY, -0.08f);
         }
 
         int frontCenter = points * 2;
@@ -89,24 +78,20 @@ public class Heart : MonoBehaviour
         vertices[backCenter] = new Vector3(0f, 0f, -0.08f);
 
         int[] triangles = new int[points * 12];
-
         int index = 0;
 
         for (int i = 0; i < points; i++)
         {
             int next = (i + 1) % points;
 
-            // Front surface
             triangles[index++] = frontCenter;
             triangles[index++] = next;
             triangles[index++] = i;
 
-            // Back surface
             triangles[index++] = backCenter;
             triangles[index++] = points + i;
             triangles[index++] = points + next;
 
-            // Side surface
             triangles[index++] = i;
             triangles[index++] = next;
             triangles[index++] = points + next;
@@ -132,10 +117,7 @@ public class Heart : MonoBehaviour
         }
         else
         {
-            Material pink = new Material(
-                Shader.Find("Standard")
-            );
-
+            Material pink = new Material(Shader.Find("Standard"));
             pink.color = new Color(1f, 0.1f, 0.5f);
             renderer.sharedMaterial = pink;
         }
@@ -148,15 +130,19 @@ public class Heart : MonoBehaviour
         if (health == null)
             return;
 
-        // Don't collect if health is already full
         if (health.Current >= health.Max)
         {
             Debug.Log("Health is already full!");
             return;
         }
 
-        // Add one health
         health.RestoreOne(protection);
+
+        // HEART PICKUP SOUND
+        if (SfxPlayer.Instance != null)
+        {
+            SfxPlayer.Instance.PlayHeartSound();
+        }
 
         Debug.Log("Heart collected! Health restored.");
 

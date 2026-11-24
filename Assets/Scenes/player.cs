@@ -22,6 +22,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // STOP INPUT WHEN PAUSED
+        if (PauseMenu.IsPaused)
+        {
+            input = Vector3.zero;
+            return;
+        }
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
@@ -32,6 +39,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (PauseMenu.IsPaused)
+            return;
+
         rb.AddForce(
             input * moveForce * speedMultiplier,
             ForceMode.Force
@@ -89,6 +99,9 @@ public class PlayerController : MonoBehaviour
 
     public void Knockback(Vector3 direction, float force)
     {
+        if (PauseMenu.IsPaused)
+            return;
+
         rb.AddForce(
             direction.normalized * force,
             ForceMode.Impulse

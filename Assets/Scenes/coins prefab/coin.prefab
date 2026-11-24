@@ -128,4 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Coin
   value: 1
-  spinSpeed: 90
+  collectParticle: {fileID: 8072709677655689650, guid: 21b16cbe017a77c47b8fb4d242a10d03, type: 3}

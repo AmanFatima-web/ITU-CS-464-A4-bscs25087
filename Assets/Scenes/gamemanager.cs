@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
     [Header("Lose Panel")]
     [SerializeField] GameObject losePanel;
 
+    [Header("Scene Names")]
+    [SerializeField] string mainMenuScene = "MainMenu";
+
     int score;
     float timeRemaining;
     bool gameEnded;
@@ -52,9 +55,7 @@ public class GameManager : MonoBehaviour
         timeRemaining = timeLimit;
 
         if (player == null)
-        {
             player = FindFirstObjectByType<Health>();
-        }
 
         if (winPanel != null)
             winPanel.SetActive(false);
@@ -63,10 +64,7 @@ public class GameManager : MonoBehaviour
             losePanel.SetActive(false);
 
         if (levelCompleteText != null)
-        {
-            levelCompleteText.text =
-                levelName + " Completed!";
-        }
+            levelCompleteText.text = levelName + " Completed!";
 
         UpdateUI();
     }
@@ -96,35 +94,23 @@ public class GameManager : MonoBehaviour
             return;
 
         score += amount;
-
         UpdateUI();
 
         if (score >= targetScore)
-        {
             Win();
-        }
     }
 
     // UPDATE UI
     public void UpdateUI()
     {
         if (scoreText != null)
-        {
-            scoreText.text =
-                $"Score: {score} / {targetScore}";
-        }
+            scoreText.text = $"Score: {score} / {targetScore}";
 
         if (timerText != null)
-        {
-            timerText.text =
-                $"Time: {Mathf.CeilToInt(timeRemaining)}";
-        }
+            timerText.text = $"Time: {Mathf.CeilToInt(timeRemaining)}";
 
         if (healthText != null && player != null)
-        {
-            healthText.text =
-                $"Health: {Mathf.Max(player.Current, 0)} / {player.Max}";
-        }
+            healthText.text = $"Health: {Mathf.Max(player.Current, 0)} / {player.Max}";
     }
 
     // HIDE GAME UI
@@ -150,7 +136,7 @@ public class GameManager : MonoBehaviour
         Lose();
     }
 
-    // WIN PANEL
+    // WIN
     void Win()
     {
         if (gameEnded)
@@ -158,27 +144,23 @@ public class GameManager : MonoBehaviour
 
         gameEnded = true;
 
+        if (SfxPlayer.Instance != null)
+            SfxPlayer.Instance.PlayWinSound();
+
         HideGameUI();
 
         if (winPanel != null)
-        {
             winPanel.SetActive(true);
-        }
         else
-        {
-            Debug.LogError("Win Panel is not assigned in Inspector!");
-        }
+            Debug.LogError("Win Panel is not assigned!");
 
         if (levelCompleteText != null)
-        {
-            levelCompleteText.text =
-                levelName + " Completed!";
-        }
+            levelCompleteText.text = levelName + " Completed!";
 
         Time.timeScale = 0f;
     }
 
-    // LOSE PANEL
+    // LOSE
     void Lose()
     {
         if (gameEnded)
@@ -186,21 +168,20 @@ public class GameManager : MonoBehaviour
 
         gameEnded = true;
 
+        if (SfxPlayer.Instance != null)
+            SfxPlayer.Instance.PlayLoseSound();
+
         HideGameUI();
 
         if (losePanel != null)
-        {
             losePanel.SetActive(true);
-        }
         else
-        {
-            Debug.LogError("Lose Panel is not assigned in Inspector!");
-        }
+            Debug.LogError("Lose Panel is not assigned!");
 
         Time.timeScale = 0f;
     }
 
-    // RESTART
+    // REPLAY CURRENT LEVEL
     public void Restart()
     {
         Time.timeScale = 1f;
@@ -208,6 +189,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(
             SceneManager.GetActiveScene().buildIndex
         );
+    }
+
+    // MAIN MENU
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene(mainMenuScene);
     }
 
     // NEXT LEVEL
