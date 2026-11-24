@@ -46,6 +46,10 @@ public class Health : MonoBehaviour
         invulnerableUntil = Time.time + iFrames;
         current = Mathf.Max(0, current - amount);
 
+        // Play damage sound
+        if (SfxPlayer.Instance != null)
+            SfxPlayer.Instance.PlayDamageSound();
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.UpdateUI();

@@ -381,6 +381,9 @@ MonoBehaviour:
   chaseRange: 7
   stopDistance: 1.5
   damage: 1
+  soundVolume: 1
+  minDistance: 2
+  maxDistance: 12
 --- !u!54 &189386614
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1652,6 +1655,9 @@ MonoBehaviour:
   chaseRange: 7
   stopDistance: 1.5
   damage: 1
+  soundVolume: 1
+  minDistance: 2
+  maxDistance: 15
 --- !u!54 &585675866
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2866,6 +2872,9 @@ MonoBehaviour:
   chaseRange: 7
   stopDistance: 1.5
   damage: 1
+  soundVolume: 1
+  minDistance: 2
+  maxDistance: 12
 --- !u!54 &832249417
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5122,6 +5131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   max: 3
   iFrames: 1
+  rotationSpeed: 90
   shielded: 0
 --- !u!1 &1492671190
 GameObject:

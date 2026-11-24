@@ -14,6 +14,8 @@ public class Coin : MonoBehaviour
 
         GameManager.Instance.AddScore(value);
 
+        SfxPlayer.Instance.PlayPickupSound();
+
         Destroy(gameObject);
     }
 }
