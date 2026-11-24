@@ -9,6 +9,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject levelSelectionPanel;
     public GameObject settingsPanel;
+    public GameObject creditsPanel;
 
     [Header("Audio")]
     public AudioMixer audioMixer;
@@ -34,6 +35,7 @@ public class MainMenuManager : MonoBehaviour
         mainMenuPanel.SetActive(false);
         levelSelectionPanel.SetActive(true);
         settingsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
     }
 
     public void ShowSettings()
@@ -41,12 +43,30 @@ public class MainMenuManager : MonoBehaviour
         mainMenuPanel.SetActive(false);
         levelSelectionPanel.SetActive(false);
         settingsPanel.SetActive(true);
+        creditsPanel.SetActive(false);
     }
 
     public void BackToMainMenu()
     {
         levelSelectionPanel.SetActive(false);
         settingsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+    }
+
+    // CREDITS
+
+    public void OpenCredits()
+    {
+        mainMenuPanel.SetActive(false);
+        levelSelectionPanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        creditsPanel.SetActive(true);
+    }
+
+    public void CloseCredits()
+    {
+        creditsPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
     }
 
@@ -72,11 +92,6 @@ public class MainMenuManager : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("level01");
-    }
-
-    public void OpenCredits()
-    {
-        SceneManager.LoadScene("Credits");
     }
 
     public void QuitGame()

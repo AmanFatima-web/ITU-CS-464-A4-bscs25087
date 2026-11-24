@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
     [Header("Lose Panel")]
     [SerializeField] GameObject losePanel;
 
+    [Header("Scene Names")]
+    [SerializeField] string mainMenuScene = "MainMenu";
+
     int score;
     float timeRemaining;
     bool gameEnded;
@@ -48,6 +51,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1f;
+
         timeRemaining = timeLimit;
 
         if (player == null)
@@ -148,7 +152,7 @@ public class GameManager : MonoBehaviour
         if (winPanel != null)
             winPanel.SetActive(true);
         else
-            Debug.LogError("Win Panel is not assigned in Inspector!");
+            Debug.LogError("Win Panel is not assigned!");
 
         if (levelCompleteText != null)
             levelCompleteText.text = levelName + " Completed!";
@@ -172,12 +176,12 @@ public class GameManager : MonoBehaviour
         if (losePanel != null)
             losePanel.SetActive(true);
         else
-            Debug.LogError("Lose Panel is not assigned in Inspector!");
+            Debug.LogError("Lose Panel is not assigned!");
 
         Time.timeScale = 0f;
     }
 
-    // RESTART
+    // REPLAY CURRENT LEVEL
     public void Restart()
     {
         Time.timeScale = 1f;
@@ -185,6 +189,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(
             SceneManager.GetActiveScene().buildIndex
         );
+    }
+
+    // MAIN MENU
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene(mainMenuScene);
     }
 
     // NEXT LEVEL
@@ -196,8 +208,12 @@ public class GameManager : MonoBehaviour
             SceneManager.GetActiveScene().buildIndex + 1;
 
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
             SceneManager.LoadScene(nextSceneIndex);
+        }
         else
+        {
             Debug.Log("All Levels Completed!");
+        }
     }
 }
